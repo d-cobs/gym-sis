@@ -278,7 +278,8 @@
 </div>
 
 <script>
-const CLAUDE_MODEL = "claude-sonnet-4-20250514";
+const GEMINI_API_KEY = "AIzaSyAJoixJERbljpdjlV0GCqga5Hgcye07ip0";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const CIRCUMFERENCE = 2 * Math.PI * 65;
 
 const WORKOUT_OPTIONS = [
@@ -480,13 +481,13 @@ Respond ONLY with valid JSON, no markdown:
 {"workout_title":"string","total_time":"38 min","warmup":["move 1","move 2","move 3"],"supersets":[{"superset_number":1,"name":"name","rounds":3,"rest_between_supersets":"90 sec","exercises":[{"name":"exercise","duration":"40 sec","target_muscle":"muscle","coaching_cue":"tip","equipment":"equipment","suggested_weight_lbs":"15-20 lbs"}]}],"cooldown":["stretch 1","stretch 2"]}`;
 
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: CLAUDE_MODEL, max_tokens: 1000, messages: [{ role:"user", content: prompt }] })
-    });
-    const data = await res.json();
-    const text = data.content.map(b => b.text||"").join("").replace(/```json|```/g,"").trim();
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9 } })
+});
+const data = await res.json();
+const text = data.candidates[0].content.parts[0].text.replace(/```json|```/g,"").trim();
     workout = JSON.parse(text);
     renderWorkoutPreview();
     showScreen("workout");
