@@ -1,832 +1,576 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>GYM SIS</title>
-  <meta name="description" content="Your AI personal trainer" />
-  <meta name="theme-color" content="#00ff88" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="GYM SIS" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; background: #0a0a0f; color: #fff; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-    #app { min-height: 100vh; min-height: -webkit-fill-available; }
-    button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
-    .mono { font-family: 'Space Mono', monospace; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GYM SIS">
+<meta name="theme-color" content="#050a05">
+<title>GYM SIS</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050a05;
+    --dark: #070d07;
+    --surface: #0a1a0a;
+    --surface2: #0d2e0d;
+    --border: #1a3a1a;
+    --border2: #1f5c1f;
+    --green: #4ade80;
+    --green-dim: #2d6b2d;
+    --text: #c8f0c8;
+    --text-dim: #a3f0a3;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+  }
 
-    /* Screens */
-    .screen { display: none; min-height: 100vh; padding: 24px; padding-bottom: 48px; }
-    .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .screen.top { justify-content: flex-start; }
-    .inner { width: 100%; max-width: 480px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* Cards */
-    .card { background: #111; border: 1px solid #1e1e1e; border-radius: 16px; padding: 20px; margin-bottom: 10px; }
-    .card-sm { background: #111; border: 1px solid #1a1a1a; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--black);
+  }
 
-    /* Buttons */
-    .btn-primary { width: 100%; background: linear-gradient(135deg, #00ff88, #00cc66); color: #000; border: none; border-radius: 12px; padding: 14px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; }
-    .btn-primary:disabled { background: #161616; color: #444; cursor: default; }
-    .btn-go { width: 100%; background: linear-gradient(135deg, #00ff88, #4488ff); color: #000; border: none; border-radius: 14px; padding: 18px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 16px; margin-bottom: 32px; }
-    .btn-ghost { width: 100%; background: transparent; color: #444; border: 1px solid #1a1a1a; border-radius: 12px; padding: 11px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px; }
-    .btn-back { background: none; border: none; color: #666; font-size: 14px; padding: 0; }
-    .btn-edit { background: #1a1a1a; border: 1px solid #2a2a2a; color: #666; border-radius: 8px; padding: 6px 12px; font-family: 'Space Mono', monospace; font-size: 12px; }
-    .btn-save { width: 100%; margin-top: 16px; background: linear-gradient(135deg, #00ff88, #4488ff); color: #000; border: none; border-radius: 12px; padding: 16px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px; }
-    .btn-icon { background: #111; border: 1px solid #1e1e1e; color: #666; border-radius: 10px; padding: 8px; font-size: 18px; line-height: 1; }
+  body {
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    /* Tags */
-    .tag { background: #00ff8812; color: #00ff88; border-radius: 20px; padding: 2px 10px; font-size: 12px; display: inline-block; }
-    .tag-sm { background: #00ff8815; color: #00ff88; border-radius: 20px; padding: 4px 12px; font-size: 12px; font-family: 'Space Mono', monospace; white-space: nowrap; }
-    .weight-badge { background: #0a2010; border: 1px solid #00ff8830; color: #00ff88; border-radius: 8px; padding: 2px 8px; font-size: 12px; font-family: 'Space Mono', monospace; white-space: nowrap; }
+  #app {
+    width: 100%;
+    max-width: 680px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--safe-top);
+  }
 
-    /* Unit toggle */
-    .unit-toggle { display: flex; background: #111; border: 1px solid #222; border-radius: 9px; overflow: hidden; }
-    .unit-btn { padding: 5px 12px; background: transparent; color: #666; border: none; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; }
-    .unit-btn.active { background: #00ff88; color: #000; }
+  /* Scanlines */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
 
-    /* Week strip */
-    .week-strip { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 10px; scrollbar-width: none; }
-    .week-strip::-webkit-scrollbar { display: none; }
-    .day-pill { flex: 0 0 auto; width: 50px; text-align: center; background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 8px 2px; cursor: default; }
-    .day-pill.today { background: #0a1a12; border-color: #00ff8840; }
-    .day-pill.clickable { cursor: pointer; }
-    .day-pill-label { font-size: 9px; color: #444; margin-bottom: 4px; letter-spacing: 0.5px; }
-    .day-pill.today .day-pill-label { color: #00ff88; }
+  header {
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--black);
+    flex-shrink: 0;
+  }
 
-    /* Modal overlay */
-    .modal-overlay { position: fixed; inset: 0; background: #000000dd; z-index: 200; display: none; align-items: flex-end; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal-sheet { background: #0f0f18; border-radius: 24px 24px 0 0; width: 100%; max-width: 520px; padding: 24px 20px 48px; max-height: 88vh; overflow-y: auto; }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.15em;
+    color: var(--green);
+    text-shadow: 0 0 30px rgba(74,222,128,0.4);
+    line-height: 1;
+  }
 
-    /* Schedule editor */
-    .day-row { margin-bottom: 8px; }
-    .day-row-header { display: flex; justify-content: space-between; align-items: center; background: #161622; border: 1px solid #222; border-radius: 12px; padding: 14px 16px; cursor: pointer; }
-    .day-row-header.open { border-radius: 12px 12px 0 0; border-color: #00ff8850; }
-    .day-options { background: #0c0c18; border: 1px solid #00ff8820; border-top: none; border-radius: 0 0 12px 12px; overflow: hidden; display: none; }
-    .day-options.open { display: block; }
-    .day-option { padding: 11px 16px; cursor: pointer; border-top: 1px solid #16161e; display: flex; align-items: center; gap: 10px; }
-    .day-option:hover { background: #0a1a12; }
-    .day-option.selected { background: #0a1a12; }
-    .day-dot { width: 7px; height: 7px; border-radius: 50%; background: #2a2a2a; flex-shrink: 0; }
-    .day-option.selected .day-dot { background: #00ff88; }
-    .day-option.selected .day-option-label { color: #00ff88; }
+  .logo-sub {
+    font-size: 8px;
+    color: var(--green-dim);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
 
-    /* History */
-    .history-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #161616; }
+  .header-actions { display: flex; gap: 8px; }
 
-    /* Timer */
-    #timer-circle-progress { transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+  .icon-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--green);
+    cursor: pointer;
+    padding: 6px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    -webkit-appearance: none;
+  }
 
-    /* Active workout */
-    .phase-badge { display: inline-block; border-radius: 20px; padding: 4px 14px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Space Mono', monospace; }
-    .circuit-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
-    .circuit-dot { width: 7px; height: 7px; border-radius: 50%; background: #222; flex-shrink: 0; }
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--dark);
+    flex-shrink: 0;
+  }
 
-    /* Suggestion banner */
-    .suggestion-banner { background: #1a1000; border: 1px solid #ffaa0030; border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+  .tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--green-dim);
+    transition: all 0.15s;
+    -webkit-appearance: none;
+  }
 
-    /* Streak badge */
-    .streak-badge { background: #111; border: 1px solid #1e1e1e; border-radius: 10px; padding: 6px 10px; text-align: center; }
+  .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
-    /* Done screen */
-    .done-emoji { font-size: 64px; margin-bottom: 12px; }
-    .gradient-text { background: linear-gradient(135deg, #00ff88, #4488ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  #chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-    /* Error */
-    .error-msg { margin-top: 10px; color: #ff4444; font-size: 13px; text-align: center; }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    /* Form tip box */
-    .form-tip { background: #0d1a14; border: 1px solid #00ff8825; border-radius: 12px; padding: 16px; margin-top: 8px; display: none; }
-    .form-tip.open { display: block; }
-  </style>
+  .msg-wrap { display: flex; flex-direction: column; animation: fadeIn 0.2s ease; }
+  .msg-wrap.user { align-items: flex-end; }
+  .msg-wrap.assistant { align-items: flex-start; }
+
+  .bubble {
+    max-width: 88%;
+    padding: 11px 15px;
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .bubble.user {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 16px 16px 4px 16px;
+    color: var(--text-dim);
+  }
+
+  .bubble.assistant {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 16px 4px;
+    color: var(--text);
+  }
+
+  .bubble.error { border-color: #ff4444; color: #ff8888; }
+
+  .bubble-label {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .msg-ts { font-size: 10px; color: var(--green-dim); margin-top: 4px; }
+
+  .typing {
+    display: flex;
+    gap: 6px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 16px 4px;
+    align-self: flex-start;
+    width: 60px;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%,60%,100% { transform: translateY(0); opacity:1; }
+    30% { transform: translateY(-7px); opacity:0.5; }
+  }
+
+  .empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 32px 20px;
+    text-align: center;
+    color: var(--green-dim);
+  }
+
+  .empty-icon { font-size: 48px; }
+
+  .empty h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.2em;
+    color: var(--green);
+    text-shadow: 0 0 20px rgba(74,222,128,0.3);
+  }
+
+  .empty p { font-size: 13px; max-width: 260px; line-height: 1.6; }
+
+  .prompts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; }
+
+  .prompt-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--green);
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    transition: all 0.15s;
+    -webkit-appearance: none;
+  }
+
+  .input-area {
+    padding: 12px 20px;
+    padding-bottom: calc(12px + var(--safe-bottom));
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background: var(--black);
+    flex-shrink: 0;
+  }
+
+  #chat-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 11px 15px;
+    border-radius: 8px;
+    font-size: 16px; /* 16px prevents iOS zoom */
+    font-family: 'Share Tech Mono', monospace;
+    resize: none;
+    outline: none;
+    min-height: 44px;
+    max-height: 110px;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+
+  #chat-input:focus { border-color: var(--green); }
+  #chat-input::placeholder { color: var(--green-dim); }
+
+  .send-btn {
+    background: var(--border2);
+    border: none;
+    color: var(--green);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    -webkit-appearance: none;
+  }
+
+  .send-btn:disabled { opacity: 0.3; }
+
+  #log-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .workout-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .workout-date {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.25em;
+    margin-bottom: 5px;
+  }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .hidden { display: none !important; }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(5px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+</style>
 </head>
 <body>
 <div id="app">
 
-  <!-- HOME -->
-  <div id="screen-home" class="screen active">
-    <div class="inner">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
-        <div>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="font-size:28px">🏋️‍♀️</span>
-            <h1 class="mono gradient-text" style="font-size:24px;font-weight:700">GYM SIS</h1>
-          </div>
-          <p style="color:#444;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;margin:4px 0 0 38px">Your AI trainer</p>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <div id="streak-badge" class="streak-badge" style="display:none">
-            <div id="streak-count" class="mono" style="font-size:14px;color:#00ff88"></div>
-            <div style="font-size:9px;color:#444;letter-spacing:1px">THIS WEEK</div>
-          </div>
-          <button class="btn-icon" onclick="openHistory()">📋</button>
-        </div>
-      </div>
+  <header>
+    <div>
+      <div class="logo">GYM SIS</div>
+      <div class="logo-sub">AI Personal Trainer</div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="clearChat()">↺ CLEAR</button>
+    </div>
+  </header>
 
-      <div id="suggestion-banner" class="suggestion-banner" style="display:none">
-        <span style="font-size:16px;flex-shrink:0">💡</span>
-        <div id="suggestion-text" style="font-size:13px;color:#ffaa00;line-height:1.5"></div>
-      </div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-chat" onclick="switchTab('chat')">💬 CHAT</button>
+    <button class="tab-btn" id="tab-log" onclick="switchTab('log')">📋 LOG (<span id="log-count">0</span>)</button>
+  </div>
 
-      <div class="card" id="today-card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
-          <div>
-            <div id="today-label" class="mono" style="font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px"></div>
-            <div id="today-focus" style="font-size:18px;font-weight:700"></div>
-          </div>
-          <button class="btn-edit" onclick="openEditor()">✏ Edit</button>
-        </div>
-        <div id="today-muscles" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px"></div>
-        <button id="btn-start-today" class="btn-primary" onclick="startTodayWorkout()">START TODAY'S WORKOUT →</button>
-        <div id="rest-msg" style="color:#444;font-size:14px;display:none">Rest day — recovery is training too 💤</div>
+  <div id="chat-panel">
+    <div id="messages">
+      <div class="empty" id="empty-state">
+        <div class="empty-icon">🏋️</div>
+        <h2>HEY SIS.</h2>
+        <p>Your AI trainer is ready. Ask anything about workouts, nutrition, or recovery.</p>
+        <div class="prompts" id="prompt-pills"></div>
       </div>
-
-      <div class="week-strip" id="week-strip"></div>
-      <button class="btn-ghost" onclick="openEditor()">EDIT FULL SCHEDULE</button>
-      <div id="home-error" class="error-msg"></div>
+    </div>
+    <div class="input-area">
+      <textarea id="chat-input" placeholder="Ask your sis anything..." rows="1"
+        oninput="autoResize(this)" onkeydown="handleKeydown(event)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()" disabled>▲</button>
     </div>
   </div>
 
-  <!-- WORKOUT PREVIEW -->
-  <div id="screen-workout" class="screen top" style="display:none">
-    <div class="inner" style="padding-top:0">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-top:8px">
-        <button class="btn-back" onclick="showScreen('home')">← Back</button>
-        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">🏋️‍♀️</span><span class="mono" style="font-size:13px;color:#00ff88">GYM SIS</span></div>
-        <div class="unit-toggle">
-          <button class="unit-btn" id="unit-lbs-preview" onclick="setUnit('lbs')">lbs</button>
-          <button class="unit-btn" id="unit-kg-preview" onclick="setUnit('kg')">kg</button>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
-        <h2 id="workout-title" class="mono" style="font-size:16px;font-weight:700;flex:1;line-height:1.3"></h2>
-        <span id="workout-time" class="tag-sm" style="margin-left:12px;flex-shrink:0"></span>
-      </div>
-      <div class="card-sm">
-        <div class="mono" style="font-size:10px;color:#ffaa00;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Warmup · 30 sec each</div>
-        <div id="preview-warmup"></div>
-      </div>
-      <div id="preview-supersets"></div>
-      <div class="card-sm">
-        <div class="mono" style="font-size:10px;color:#ff88cc;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Cooldown · 30 sec each</div>
-        <div id="preview-cooldown"></div>
-      </div>
-      <button class="btn-go" onclick="startWorkout()">LET'S GO 🏋️‍♀️</button>
+  <div id="log-panel" class="hidden">
+    <div class="empty hidden" id="log-empty">
+      <div class="empty-icon">📋</div>
+      <h2>NO LOGS YET</h2>
+      <p>Tell GYM SIS what you did — workouts auto-log here.</p>
     </div>
+    <div id="log-list"></div>
   </div>
 
-  <!-- ACTIVE WORKOUT -->
-  <div id="screen-active" class="screen top" style="display:none">
-    <div class="inner" style="padding-top:0">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-top:8px">
-        <button class="btn-back" onclick="showScreen('workout')">← Workout</button>
-        <div id="active-progress" class="mono" style="font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px"></div>
-        <div class="unit-toggle">
-          <button class="unit-btn" id="unit-lbs-active" onclick="setUnit('lbs')">lbs</button>
-          <button class="unit-btn" id="unit-kg-active" onclick="setUnit('kg')">kg</button>
-        </div>
-      </div>
-
-      <div style="text-align:center;margin-bottom:6px">
-        <span id="phase-badge" class="phase-badge"></span>
-      </div>
-      <h2 id="active-name" style="text-align:center;font-size:24px;font-weight:700;margin:10px 0 4px"></h2>
-      <div id="active-meta" style="text-align:center;color:#555;font-size:13px;margin-bottom:6px"></div>
-      <div id="active-weight" style="text-align:center;margin-bottom:14px"></div>
-
-      <div style="margin:18px 0;text-align:center">
-        <svg width="150" height="150" viewBox="0 0 150 150">
-          <circle cx="75" cy="75" r="65" fill="none" stroke="#1a1a2e" stroke-width="8"/>
-          <circle id="timer-circle-progress" cx="75" cy="75" r="65" fill="none" stroke="#00ff88" stroke-width="8" stroke-linecap="round"
-            stroke-dasharray="408.41" stroke-dashoffset="0" transform="rotate(-90 75 75)"/>
-          <text id="timer-text" x="75" y="70" text-anchor="middle" fill="#fff" font-size="34" font-weight="700" font-family="'Space Mono', monospace">40</text>
-          <text x="75" y="90" text-anchor="middle" fill="#555" font-size="12" font-family="'Space Mono', monospace">seconds</text>
-        </svg>
-      </div>
-
-      <div id="coaching-cue" class="card-sm" style="text-align:center;display:none">
-        <div id="coaching-text" style="font-size:13px;color:#aaa;line-height:1.6;font-style:italic"></div>
-      </div>
-
-      <div id="demo-container" style="margin:14px 0;display:none">
-        <button id="demo-toggle" style="width:100%;background:transparent;border:1px solid #1e1e1e;color:#555;border-radius:12px;padding:10px;font-size:13px" onclick="toggleDemo()">Show Form Tips</button>
-        <div id="form-tip" class="form-tip">
-          <div id="demo-icon" style="font-size:22px;margin-bottom:6px"></div>
-          <div id="demo-muscle" class="mono" style="font-size:10px;color:#00ff88;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px"></div>
-          <div id="demo-cue" style="font-size:14px;color:#ccc;line-height:1.7"></div>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-bottom:18px">
-        <button id="btn-timer" onclick="toggleTimer()" style="flex:2;background:linear-gradient(135deg,#00ff88,#00ff88aa);color:#000;border:none;border-radius:14px;padding:18px;font-family:'Space Mono',monospace;font-weight:700;font-size:16px">▶ START</button>
-        <button onclick="advance()" style="flex:1;background:#111;color:#555;border:1px solid #1e1e1e;border-radius:14px;padding:18px;font-family:'Space Mono',monospace;font-weight:700;font-size:12px">SKIP →</button>
-      </div>
-
-      <div id="circuit-preview" class="card-sm" style="display:none">
-        <div id="circuit-title" class="mono" style="font-size:10px;color:#333;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px"></div>
-        <div id="circuit-rows"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DONE -->
-  <div id="screen-done" class="screen" style="text-align:center">
-    <div class="done-emoji">🏋️‍♀️</div>
-    <h2 class="mono gradient-text" style="font-size:22px;font-weight:700;margin-bottom:8px">GYM SIS DELIVERED</h2>
-    <p style="color:#555;margin-bottom:8px">Logged to your history. Keep the streak alive.</p>
-    <p id="done-streak" style="color:#333;font-size:12px;margin-bottom:40px"></p>
-    <button onclick="showScreen('home')" style="background:linear-gradient(135deg,#00ff88,#4488ff);color:#000;border:none;border-radius:14px;padding:16px 40px;font-family:'Space Mono',monospace;font-weight:700;font-size:14px">HOME →</button>
-  </div>
-
-  <!-- LOADING -->
-  <div id="screen-loading" class="screen" style="text-align:center;display:none">
-    <div style="font-size:40px;margin-bottom:16px">🏋️‍♀️</div>
-    <div class="mono" style="color:#00ff88;letter-spacing:2px">GENERATING...</div>
-    <div style="color:#444;font-size:12px;margin-top:8px">Building your superset workout</div>
-  </div>
-
-</div>
-
-<!-- SCHEDULE EDITOR MODAL -->
-<div id="editor-modal" class="modal-overlay" onclick="handleModalClick(event,'editor-modal')">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <div>
-        <h3 class="mono" style="font-size:15px;color:#fff;margin-bottom:2px">Edit Schedule</h3>
-        <p style="font-size:12px;color:#555">Tap a day to change it</p>
-      </div>
-      <button onclick="closeModal('editor-modal')" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;border-radius:8px;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
-    </div>
-    <div id="editor-days"></div>
-    <button class="btn-save" onclick="saveSchedule()">SAVE SCHEDULE</button>
-  </div>
-</div>
-
-<!-- HISTORY MODAL -->
-<div id="history-modal" class="modal-overlay" onclick="handleModalClick(event,'history-modal')">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-      <h3 class="mono" style="font-size:15px;color:#fff">Workout History</h3>
-      <button onclick="closeModal('history-modal')" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#888;border-radius:8px;width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
-    </div>
-    <div id="history-list"></div>
-  </div>
 </div>
 
 <script>
-const GEMINI_API_KEY = "AIzaSyAJoixJERbljpdjlV0GCqga5Hgcye07ip0";
-const GEMINI_MODEL = "gemini-2.0-flash";
-const CIRCUMFERENCE = 2 * Math.PI * 65;
+  // ⚠️ UPDATE THIS after Vercel deploy
+  const API_URL = 'https://gym-sis.vercel.app';
 
-const WORKOUT_OPTIONS = [
-  { focus: "REST", muscles: [] },
-  { focus: "Lower Body + Core", muscles: ["glutes","hamstrings","quads","core"] },
-  { focus: "Push (Chest + Shoulders + Triceps)", muscles: ["chest","shoulders","triceps"] },
-  { focus: "Pull (Back + Biceps)", muscles: ["back","biceps"] },
-  { focus: "Full Body Power", muscles: ["glutes","chest","back","shoulders","core"] },
-  { focus: "Upper Body", muscles: ["chest","back","shoulders","biceps","triceps"] },
-  { focus: "Core & Conditioning", muscles: ["core","glutes"] },
-  { focus: "Legs & Glutes", muscles: ["quads","hamstrings","glutes","calves"] },
-];
+  const WORKOUT_REGEX = /\b(sets?|reps?|lbs?|kg|minutes?|workout|trained|lifted|ran|miles?|deadlift|squat|bench|press|curl|row|pull|hiit|cardio)\b/i;
 
-const DEFAULT_SCHEDULE = [
-  { day:"Monday",    focus:"Lower Body + Core",                    muscles:["glutes","hamstrings","quads","core"] },
-  { day:"Tuesday",   focus:"Push (Chest + Shoulders + Triceps)",   muscles:["chest","shoulders","triceps"] },
-  { day:"Wednesday", focus:"REST",                                  muscles:[] },
-  { day:"Thursday",  focus:"Pull (Back + Biceps)",                  muscles:["back","biceps"] },
-  { day:"Friday",    focus:"Full Body Power",                       muscles:["glutes","chest","back","shoulders","core"] },
-  { day:"Saturday",  focus:"Legs & Glutes",                         muscles:["quads","hamstrings","glutes","calves"] },
-  { day:"Sunday",    focus:"REST",                                  muscles:[] },
-];
+  const PROMPTS = [
+    "Build me a push day 💪",
+    "I have 20 mins, what do I do?",
+    "How do I eat to build muscle?",
+    "I'm sore — what helps?",
+    "Design a 3-day split for me",
+  ];
 
-const DEMOS = {
-  "goblet squat":                { muscle:"quads/glutes",      icon:"🏋️‍♀️", cue:"Hold KB at chest, sit back like into a chair, drive knees out, explode up." },
-  "dumbbell lunges":             { muscle:"glutes/quads",      icon:"🦵",   cue:"Step forward, back knee hovers 1\" from floor. Keep torso upright, push through front heel to return." },
-  "romanian deadlift":           { muscle:"hamstrings/glutes", icon:"🔥",   cue:"Hinge at hips, soft bend in knees. Feel the stretch in hamstrings. Drive hips forward to stand." },
-  "dumbbell chest press":        { muscle:"chest/triceps",     icon:"💪",   cue:"Bench or floor. Lower to 90° at elbows, press explosively. Control the descent." },
-  "dumbbell row":                { muscle:"back/biceps",       icon:"⬆️",   cue:"Brace on bench, pull elbow to sky. Squeeze at top. Full extension on the way down." },
-  "shoulder press":              { muscle:"shoulders",         icon:"🎯",   cue:"Neutral grip or overhand. Press overhead, don't arch lower back. Full lockout, slow lower." },
-  "lateral raise":               { muscle:"shoulders",         icon:"✈️",   cue:"Slight forward lean, lead with elbows not wrists. Stop at shoulder height. Control down." },
-  "stability ball crunch":       { muscle:"core",              icon:"⚽",   cue:"Hips below shoulders on ball. Crunch up, exhale at top. Don't pull neck — hands lightly behind head." },
-  "plank":                       { muscle:"core",              icon:"📏",   cue:"Straight line from head to heels. Squeeze glutes, tuck pelvis, breathe steadily. No sagging hips." },
-  "kettlebell swing":            { muscle:"glutes/hamstrings", icon:"🔄",   cue:"Hip hinge (not squat!), drive hips forward explosively. Let KB float to shoulder height." },
-  "push-up":                     { muscle:"chest/shoulders",   icon:"⬇️",   cue:"Body plank-straight. Lower chest to mat, press through palms. Elbows at 45° — not flared." },
-  "bicep curl":                  { muscle:"biceps",            icon:"💪",   cue:"Elbows pinned to sides. Curl and supinate at top. Lower slowly — the eccentric matters." },
-  "tricep overhead extension":   { muscle:"triceps",           icon:"🏹",   cue:"Elbows point forward, not flared. Lower dumbbell behind head, press up. Keep core tight." },
-  "reverse lunge":               { muscle:"glutes/quads",      icon:"↩️",   cue:"Step back, both knees at 90°. Drive front heel into floor to return." },
-  "sumo deadlift":               { muscle:"glutes/inner thighs",icon:"🏆",  cue:"Wide stance, toes out. Keep chest up, hinge and grip KB. Drive through heels, hips forward at top." },
-  "bent over row":               { muscle:"back",              icon:"🦅",   cue:"Hinge 45°, brace core. Drive elbows behind torso, squeeze shoulder blades. Control down." },
-  "glute bridge":                { muscle:"glutes",            icon:"🌉",   cue:"Feet flat, push through heels. Drive hips to ceiling, squeeze hard at top. Slow lower." },
-  "stability ball hamstring curl":{ muscle:"hamstrings",       icon:"⚽",   cue:"Heels on ball, hips up. Curl ball toward glutes. Keep hips high throughout. Brutal." },
-  "chest fly":                   { muscle:"chest",             icon:"🕊️",   cue:"Wide arc down (feel the stretch), squeeze together at top like hugging a tree. Light weight here." },
-  "renegade row":                { muscle:"back/core",         icon:"🤸‍♀️",  cue:"Push-up position. Row one DB, keep hips square. Core does all the anti-rotation work." },
-};
+  let messages = [];
+  let workouts = [];
+  let loading = false;
 
-// ── State ──────────────────────────────────────────────────────────────────
-let schedule = loadLS("gymsis_schedule", DEFAULT_SCHEDULE);
-let history  = loadLS("gymsis_history", []);
-let unit     = loadLS("gymsis_unit", "lbs");
-let workout  = null;
-let selectedDay = null;
-let draftSchedule = null;
-
-// Timer state
-let timerInterval = null;
-let timerTotal = 40;
-let timerLeft  = 40;
-let timerRunning = false;
-
-// Active workout state
-let phase = "warmup";  // warmup | superset | rest | cooldown
-let ssIdx = 0, exIdx = 0, roundIdx = 0;
-let currentEx = null;
-
-const PHASE_COLORS = { warmup:"#ffaa00", superset:"#00ff88", rest:"#4488ff", cooldown:"#ff88cc" };
-
-// ── localStorage ──────────────────────────────────────────────────────────
-function loadLS(key, def) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } }
-function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
-
-// ── Helpers ────────────────────────────────────────────────────────────────
-function getToday() { return new Date().toLocaleDateString("en-US", { weekday:"long" }); }
-function parseDur(s) { const m = (s||"").match(/(\d+)/); return m ? parseInt(m[1]) : 40; }
-
-function getRecentMuscles(days=2) {
-  const cutoff = Date.now() - days * 86400000;
-  return [...new Set(history.filter(h => h.ts > cutoff).flatMap(h => h.muscles||[]))];
-}
-
-function getDemo(name) {
-  const lower = name.toLowerCase();
-  for (const [k, v] of Object.entries(DEMOS)) { if (lower.includes(k)) return v; }
-  return null;
-}
-
-function weightDisplay(str) {
-  if (!str || str === "null") return "";
-  const m = str.match(/(\d+)(?:\s*[-–]\s*(\d+))?/);
-  if (!m) return "";
-  const lo = parseInt(m[1]), hi = m[2] ? parseInt(m[2]) : null;
-  const toKg = v => Math.round(v * 0.453592 / 2.5) * 2.5;
-  return unit === "kg"
-    ? (hi ? `${toKg(lo)}–${toKg(hi)} kg` : `${toKg(lo)} kg`)
-    : (hi ? `${lo}–${hi} lbs` : `${lo} lbs`);
-}
-
-function weekStreak() { return history.filter(h => (Date.now()-h.ts) < 7*86400000).length; }
-
-// ── Screen management ──────────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => { s.style.display = "none"; s.classList.remove("active"); });
-  const el = document.getElementById("screen-" + id);
-  el.style.display = "flex";
-  if (id === "home" || id === "done" || id === "loading") el.classList.add("active");
-  window.scrollTo(0, 0);
-}
-
-// ── Unit toggle ────────────────────────────────────────────────────────────
-function setUnit(u) {
-  unit = u; saveLS("gymsis_unit", u);
-  document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(`[id^="unit-${u}"]`).forEach(b => b.classList.add("active"));
-  // refresh weight displays if on workout screen
-  if (workout) renderWorkoutPreview();
-  if (currentEx) renderActiveExercise();
-  if (currentEx) renderCircuit();
-}
-
-function syncUnitToggle() {
-  document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
-  document.querySelectorAll(`[id^="unit-${unit}"]`).forEach(b => b.classList.add("active"));
-}
-
-// ── Home screen ────────────────────────────────────────────────────────────
-function renderHome() {
-  const today = getToday();
-  const todaySched = schedule.find(d => d.day === today);
-  const streak = weekStreak();
-
-  // Streak badge
-  const badge = document.getElementById("streak-badge");
-  if (streak > 0) { badge.style.display = "block"; document.getElementById("streak-count").textContent = streak + "🔥"; }
-  else badge.style.display = "none";
-
-  // Today card
-  document.getElementById("today-label").textContent = `Today · ${today}`;
-  document.getElementById("today-focus").textContent = todaySched ? todaySched.focus : "";
-  const musclesEl = document.getElementById("today-muscles");
-  musclesEl.innerHTML = "";
-  const btn = document.getElementById("btn-start-today");
-  const restMsg = document.getElementById("rest-msg");
-
-  if (todaySched && todaySched.muscles.length > 0) {
-    todaySched.muscles.forEach(m => { const t = document.createElement("span"); t.className = "tag"; t.textContent = m; musclesEl.appendChild(t); });
-    btn.style.display = "block"; restMsg.style.display = "none";
-  } else {
-    btn.style.display = "none"; restMsg.style.display = "block";
-  }
-
-  // Smart suggestion
-  const recentM = getRecentMuscles(2);
-  const banner = document.getElementById("suggestion-banner");
-  if (todaySched && todaySched.muscles.length && recentM.length) {
-    const overlap = todaySched.muscles.filter(m => recentM.includes(m));
-    if (overlap.length) {
-      const alt = WORKOUT_OPTIONS.find(o => o.muscles.length > 0 && o.focus !== todaySched.focus && o.muscles.every(m => !recentM.includes(m)));
-      let txt = `You worked <strong>${overlap.join(", ")}</strong> recently. `;
-      txt += alt ? `Consider <strong>${alt.focus}</strong> instead for better recovery.` : `Consider resting today.`;
-      document.getElementById("suggestion-text").innerHTML = txt;
-      banner.style.display = "flex";
-    } else banner.style.display = "none";
-  } else banner.style.display = "none";
-
-  // Week strip
-  const strip = document.getElementById("week-strip");
-  strip.innerHTML = "";
-  schedule.forEach(d => {
-    const pill = document.createElement("div");
-    pill.className = "day-pill" + (d.day === today ? " today" : "") + (d.muscles.length ? " clickable" : "");
-    pill.innerHTML = `<div class="day-pill-label">${d.day.slice(0,3).toUpperCase()}</div><div style="font-size:18px">${d.muscles.length ? "🏋️‍♀️" : "😴"}</div>`;
-    if (d.muscles.length) pill.onclick = () => generateAndGo(d);
-    strip.appendChild(pill);
+  window.addEventListener('DOMContentLoaded', () => {
+    messages = JSON.parse(localStorage.getItem('gymsis-messages') || '[]');
+    workouts = JSON.parse(localStorage.getItem('gymsis-workouts') || '[]');
+    renderMessages();
+    renderLog();
+    buildPromptPills();
   });
 
-  document.getElementById("home-error").textContent = "";
-  syncUnitToggle();
-}
-
-// ── Generate workout ────────────────────────────────────────────────────────
-async function generateAndGo(dayInfo) {
-  selectedDay = dayInfo;
-  showScreen("loading");
-  const recentM = getRecentMuscles(3);
-  const recentNote = recentM.length ? `Recently worked muscles (last 3 days): ${recentM.join(", ")}. Slightly de-emphasize and add variety.` : "";
-
-  const prompt = `You are an expert personal trainer. Generate a 35-45 minute strength workout for: ${dayInfo.focus}.
-RULES:
-- Use ONLY: dumbbells, kettlebells, bench, stability ball, yoga mat, bodyweight
-- ALL sets are TIME-BASED: train to failure within a set time (30-45 seconds per exercise)
-- Structure as 4-5 SUPERSETS. Each superset has 2-3 exercises targeting DIFFERENT muscle groups so one rests while the other works
-- Each superset is performed 3 rounds before moving to next
-- Rest only 60-90 seconds BETWEEN supersets (not between exercises within a superset)
-- Total workout: 35-45 min
-- Muscles: ${dayInfo.muscles.join(", ")}
-- For weighted exercises, provide suggested_weight_lbs like "15-20 lbs" for an intermediate female lifter. null for bodyweight.
-${recentNote}
-Respond ONLY with valid JSON, no markdown:
-{"workout_title":"string","total_time":"38 min","warmup":["move 1","move 2","move 3"],"supersets":[{"superset_number":1,"name":"name","rounds":3,"rest_between_supersets":"90 sec","exercises":[{"name":"exercise","duration":"40 sec","target_muscle":"muscle","coaching_cue":"tip","equipment":"equipment","suggested_weight_lbs":"15-20 lbs"}]}],"cooldown":["stretch 1","stretch 2"]}`;
-
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.9 } })
-});
-const data = await res.json();
-const text = data.candidates[0].content.parts[0].text.replace(/```json|```/g,"").trim();
-    workout = JSON.parse(text);
-    renderWorkoutPreview();
-    showScreen("workout");
-  } catch(e) {
-    showScreen("home");
-    document.getElementById("home-error").textContent = "Couldn't generate workout. Check connection and try again.";
+  function buildPromptPills() {
+    const container = document.getElementById('prompt-pills');
+    PROMPTS.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'prompt-pill';
+      btn.textContent = p;
+      btn.onclick = () => { document.getElementById('chat-input').value = p; updateSendBtn(); sendMessage(); };
+      container.appendChild(btn);
+    });
   }
-}
 
-function startTodayWorkout() {
-  const today = getToday();
-  const d = schedule.find(s => s.day === today);
-  if (d && d.muscles.length) generateAndGo(d);
-}
-
-// ── Workout preview ────────────────────────────────────────────────────────
-function renderWorkoutPreview() {
-  document.getElementById("workout-title").textContent = workout.workout_title;
-  document.getElementById("workout-time").textContent = workout.total_time;
-
-  // Warmup
-  document.getElementById("preview-warmup").innerHTML = workout.warmup.map(w => `<div style="color:#bbb;padding:3px 0;font-size:14px">• ${w}</div>`).join("");
-
-  // Supersets
-  document.getElementById("preview-supersets").innerHTML = workout.supersets.map(ss => {
-    const exHTML = ss.exercises.map(ex => {
-      const demo = getDemo(ex.name);
-      const wt = weightDisplay(ex.suggested_weight_lbs);
-      return `<div style="border-top:1px solid #1a1a1a;padding-top:10px;margin-top:10px">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div style="flex:1">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
-              <span style="font-weight:600;font-size:14px">${demo?.icon||"🏋️‍♀️"} ${ex.name}</span>
-              ${wt ? `<span class="weight-badge">🏋️‍♀️ ${wt}</span>` : ""}
-            </div>
-            <div style="font-size:12px;color:#555;margin-bottom:3px">${ex.target_muscle} · ${ex.equipment}</div>
-            <div style="font-size:12px;color:#999;font-style:italic;line-height:1.5">${ex.coaching_cue}</div>
-          </div>
-          <div class="mono" style="font-size:12px;color:#00ff88;margin-left:12px;flex-shrink:0">${ex.duration}</div>
-        </div>
-      </div>`;
-    }).join("");
-    return `<div class="card-sm">
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <div><div class="mono" style="font-size:10px;color:#00ff88;letter-spacing:2px;text-transform:uppercase">Superset ${ss.superset_number}</div><div style="font-weight:700;font-size:15px;margin-top:2px">${ss.name}</div></div>
-        <div style="text-align:right"><div class="mono" style="font-size:12px;color:#666">${ss.rounds} rounds</div><div style="font-size:10px;color:#444;margin-top:2px">rest ${ss.rest_between_supersets}</div></div>
-      </div>${exHTML}</div>`;
-  }).join("");
-
-  // Cooldown
-  document.getElementById("preview-cooldown").innerHTML = workout.cooldown.map(c => `<div style="color:#bbb;padding:3px 0;font-size:14px">• ${c}</div>`).join("");
-  syncUnitToggle();
-}
-
-// ── Active workout ─────────────────────────────────────────────────────────
-function startWorkout() {
-  phase = "warmup"; ssIdx = 0; exIdx = 0; roundIdx = 0;
-  stopTimer();
-  showScreen("active");
-  if (workout.warmup?.length) {
-    setCurrentEx({ name: workout.warmup[0], duration:"30 sec", target_muscle:"warmup", coaching_cue:"Move through range of motion, prepare your joints.", equipment:"bodyweight", _wi: 0 }, "warmup");
+  function renderMessages() {
+    const container = document.getElementById('messages');
+    Array.from(container.children).forEach(c => { if (!c.id) c.remove(); });
+    document.getElementById('empty-state').style.display = messages.length === 0 ? 'flex' : 'none';
+    messages.forEach(m => appendBubble(m, false));
+    scrollToBottom();
   }
-}
 
-function setCurrentEx(ex, ph) {
-  currentEx = ex;
-  phase = ph;
-  timerTotal = parseDur(ex.duration);
-  timerLeft = timerTotal;
-  stopTimer();
-  renderActiveExercise();
-  renderCircuit();
-  updateTimerDisplay();
-}
-
-function renderActiveExercise() {
-  const isRest = currentEx.isRest;
-  const color = PHASE_COLORS[phase] || "#00ff88";
-  const ss = phase === "superset" ? workout.supersets[ssIdx] : null;
-
-  // Progress label
-  let prog = "";
-  if (phase === "warmup") prog = "Warmup";
-  else if (phase === "cooldown") prog = "Cooldown";
-  else if (isRest) prog = "Rest";
-  else prog = `SS ${ssIdx+1}/${workout.supersets.length} · Round ${roundIdx+1}/${ss?.rounds}`;
-  document.getElementById("active-progress").textContent = prog;
-
-  // Phase badge
-  const badge = document.getElementById("phase-badge");
-  badge.textContent = phase;
-  badge.style.background = color + "18";
-  badge.style.color = color;
-
-  // Timer ring color
-  document.getElementById("timer-circle-progress").setAttribute("stroke", color);
-
-  // Name
-  document.getElementById("active-name").textContent = currentEx.name;
-
-  // Meta
-  const meta = document.getElementById("active-meta");
-  if (currentEx.target_muscle && !isRest) { meta.textContent = currentEx.target_muscle + (currentEx.equipment ? ` · ${currentEx.equipment}` : ""); meta.style.display = "block"; }
-  else meta.style.display = "none";
-
-  // Weight
-  const wtEl = document.getElementById("active-weight");
-  const wt = weightDisplay(currentEx.suggested_weight_lbs);
-  if (wt && !isRest) { wtEl.innerHTML = `<span class="weight-badge">🏋️‍♀️ ${wt}</span>`; wtEl.style.display = "block"; }
-  else wtEl.style.display = "none";
-
-  // Coaching cue
-  const cueBox = document.getElementById("coaching-cue");
-  if (currentEx.coaching_cue) { document.getElementById("coaching-text").textContent = `"${currentEx.coaching_cue}"`; cueBox.style.display = "block"; }
-  else cueBox.style.display = "none";
-
-  // Demo
-  const demo = getDemo(currentEx.name);
-  const demoContainer = document.getElementById("demo-container");
-  if (demo && !isRest) {
-    demoContainer.style.display = "block";
-    document.getElementById("demo-icon").textContent = demo.icon;
-    document.getElementById("demo-muscle").textContent = demo.muscle;
-    document.getElementById("demo-cue").textContent = demo.cue;
-    document.getElementById("form-tip").classList.remove("open");
-    document.getElementById("demo-toggle").textContent = "Show Form Tips";
-  } else demoContainer.style.display = "none";
-
-  // Timer button color
-  const btnTimer = document.getElementById("btn-timer");
-  btnTimer.style.background = `linear-gradient(135deg, ${color}, ${color}aa)`;
-  btnTimer.style.color = "#000";
-  btnTimer.textContent = "▶ START";
-  timerRunning = false;
-
-  syncUnitToggle();
-}
-
-function renderCircuit() {
-  const preview = document.getElementById("circuit-preview");
-  if (phase !== "superset" || currentEx?.isRest) { preview.style.display = "none"; return; }
-  const ss = workout.supersets[ssIdx];
-  preview.style.display = "block";
-  document.getElementById("circuit-title").textContent = `${ss.name} · Circuit`;
-  const color = PHASE_COLORS["superset"];
-  document.getElementById("circuit-rows").innerHTML = ss.exercises.map((ex, i) => {
-    const wt = weightDisplay(ex.suggested_weight_lbs);
-    return `<div class="circuit-row" style="border-bottom:${i < ss.exercises.length-1 ? "1px solid #161616" : "none"}">
-      <div class="circuit-dot" style="background:${i===exIdx ? color : "#222"}"></div>
-      <div style="font-size:13px;color:${i===exIdx ? "#fff" : "#444"};flex:1">${ex.name}</div>
-      <div style="display:flex;align-items:center;gap:6px">
-        ${wt ? `<span class="weight-badge" style="font-size:11px">🏋️‍♀️ ${wt}</span>` : ""}
-        <span class="mono" style="font-size:10px;color:${i===exIdx ? color : "#2a2a2a"}">${ex.duration}</span>
-      </div>
-    </div>`;
-  }).join("");
-}
-
-// ── Timer ──────────────────────────────────────────────────────────────────
-function updateTimerDisplay() {
-  const pct = timerLeft / timerTotal;
-  const offset = CIRCUMFERENCE * (1 - pct);
-  const urgent = timerLeft <= 10;
-  const color = urgent ? "#ff4444" : (PHASE_COLORS[phase] || "#00ff88");
-  document.getElementById("timer-circle-progress").setAttribute("stroke-dashoffset", offset);
-  document.getElementById("timer-circle-progress").setAttribute("stroke", color);
-  document.getElementById("timer-text").textContent = timerLeft;
-  document.getElementById("timer-text").setAttribute("fill", urgent ? "#ff4444" : "#fff");
-}
-
-function toggleTimer() {
-  if (timerRunning) {
-    stopTimer();
-    const color = PHASE_COLORS[phase] || "#00ff88";
-    document.getElementById("btn-timer").style.background = `linear-gradient(135deg, ${color}, ${color}aa)`;
-    document.getElementById("btn-timer").style.color = "#000";
-    document.getElementById("btn-timer").textContent = "▶ START";
-  } else {
-    startTimer();
-    document.getElementById("btn-timer").style.background = "#161616";
-    document.getElementById("btn-timer").style.color = "#fff";
-    document.getElementById("btn-timer").textContent = "⏸ PAUSE";
-  }
-}
-
-function startTimer() {
-  timerRunning = true;
-  timerInterval = setInterval(() => {
-    timerLeft--;
-    updateTimerDisplay();
-    if (timerLeft <= 0) { stopTimer(); advance(); }
-  }, 1000);
-}
-
-function stopTimer() {
-  timerRunning = false;
-  clearInterval(timerInterval);
-  timerInterval = null;
-}
-
-function toggleDemo() {
-  const tip = document.getElementById("form-tip");
-  const btn = document.getElementById("demo-toggle");
-  tip.classList.toggle("open");
-  btn.textContent = tip.classList.contains("open") ? "Hide Form Tips" : "Show Form Tips";
-}
-
-// ── Advance workout ────────────────────────────────────────────────────────
-function advance() {
-  stopTimer();
-  document.getElementById("form-tip").classList.remove("open");
-  document.getElementById("demo-toggle").textContent = "Show Form Tips";
-
-  if (phase === "warmup") {
-    const wi = (currentEx._wi || 0) + 1;
-    if (wi < workout.warmup.length) setCurrentEx({ name:workout.warmup[wi], duration:"30 sec", target_muscle:"warmup", coaching_cue:"Keep it controlled.", equipment:"bodyweight", _wi:wi }, "warmup");
-    else { const ex = workout.supersets[0].exercises[0]; ssIdx=0; exIdx=0; roundIdx=0; setCurrentEx(ex, "superset"); }
-    return;
-  }
-  if (phase === "rest") {
-    const next = ssIdx + 1;
-    if (next < workout.supersets.length) { ssIdx=next; exIdx=0; roundIdx=0; setCurrentEx(workout.supersets[next].exercises[0], "superset"); }
-    else goToCooldown();
-    return;
-  }
-  if (phase === "cooldown") {
-    const ci = (currentEx._ci || 0) + 1;
-    if (ci < workout.cooldown.length) setCurrentEx({ name:workout.cooldown[ci], duration:"30 sec", target_muscle:"cooldown", coaching_cue:"Let your body recover.", equipment:"bodyweight", _ci:ci }, "cooldown");
-    else completeWorkout();
-    return;
-  }
-  // superset
-  const ss = workout.supersets[ssIdx];
-  const nextEx = exIdx + 1;
-  if (nextEx < ss.exercises.length) { exIdx=nextEx; setCurrentEx(ss.exercises[nextEx], "superset"); }
-  else {
-    const nextRound = roundIdx + 1;
-    if (nextRound < ss.rounds) { roundIdx=nextRound; exIdx=0; setCurrentEx(ss.exercises[0], "superset"); }
-    else if (ssIdx + 1 < workout.supersets.length) {
-      const restSec = parseDur(ss.rest_between_supersets || "90 sec");
-      setCurrentEx({ name:"Rest", duration:`${restSec} sec`, target_muscle:"", coaching_cue:"Shake it out. Hydrate. Next superset coming.", equipment:"", isRest:true }, "rest");
+  function appendBubble(m, animate = true) {
+    document.getElementById('empty-state').style.display = 'none';
+    const container = document.getElementById('messages');
+    const wrap = document.createElement('div');
+    wrap.className = `msg-wrap ${m.role}`;
+    const bubble = document.createElement('div');
+    bubble.className = `bubble ${m.role}${m.error ? ' error' : ''}`;
+    if (m.role === 'assistant' && !m.error) {
+      bubble.innerHTML = `<span class="bubble-label">GYM SIS ▸</span>${escapeHtml(m.content)}`;
+    } else {
+      bubble.textContent = m.content;
     }
-    else goToCooldown();
+    const ts = document.createElement('div');
+    ts.className = 'msg-ts';
+    ts.textContent = m.ts ? new Date(m.ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+    wrap.appendChild(bubble);
+    wrap.appendChild(ts);
+    container.appendChild(wrap);
+    if (animate) scrollToBottom();
   }
-}
 
-function goToCooldown() {
-  if (workout.cooldown?.length) setCurrentEx({ name:workout.cooldown[0], duration:"30 sec", target_muscle:"cooldown", coaching_cue:"Breathe deep. You earned this.", equipment:"bodyweight", _ci:0 }, "cooldown");
-  else completeWorkout();
-}
-
-function completeWorkout() {
-  if (selectedDay?.muscles.length) {
-    history.push({ ts:Date.now(), focus:selectedDay.focus, muscles:selectedDay.muscles });
-    saveLS("gymsis_history", history);
+  function showTyping() {
+    const container = document.getElementById('messages');
+    const el = document.createElement('div');
+    el.id = 'typing-indicator';
+    el.className = 'typing';
+    el.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    container.appendChild(el);
+    scrollToBottom();
   }
-  const s = weekStreak();
-  document.getElementById("done-streak").textContent = `${s} workout${s!==1?"s":""} this week 🔥`;
-  showScreen("done");
-}
 
-// ── Schedule editor ────────────────────────────────────────────────────────
-function openEditor() {
-  draftSchedule = schedule.map(d => ({...d}));
-  renderEditor();
-  openModal("editor-modal");
-}
-
-function renderEditor() {
-  document.getElementById("editor-days").innerHTML = draftSchedule.map((d, i) => `
-    <div class="day-row" id="day-row-${i}">
-      <div class="day-row-header" id="day-header-${i}" onclick="toggleDayRow(${i})">
-        <div>
-          <div class="mono" style="font-size:10px;color:#555;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px">${d.day}</div>
-          <div style="font-weight:600;font-size:14px;color:${d.muscles.length?'#ddd':'#555'}">${d.focus}</div>
-        </div>
-        <div id="day-arrow-${i}" style="color:#333;font-size:14px">▼</div>
-      </div>
-      <div class="day-options" id="day-options-${i}">
-        ${WORKOUT_OPTIONS.map(opt => `
-          <div class="day-option${d.focus===opt.focus?' selected':''}" onclick="selectDayOption(${i},'${opt.focus}')">
-            <div class="day-dot"></div>
-            <div>
-              <div class="day-option-label" style="font-size:13px;color:#bbb">${opt.focus}</div>
-              ${opt.muscles.length ? `<div style="font-size:11px;color:#444;margin-top:1px">${opt.muscles.join(", ")}</div>` : ""}
-            </div>
-          </div>`).join("")}
-      </div>
-    </div>`).join("");
-}
-
-function toggleDayRow(i) {
-  const opts = document.getElementById(`day-options-${i}`);
-  const header = document.getElementById(`day-header-${i}`);
-  const arrow = document.getElementById(`day-arrow-${i}`);
-  const isOpen = opts.classList.contains("open");
-  // close all
-  document.querySelectorAll(".day-options").forEach(o => o.classList.remove("open"));
-  document.querySelectorAll(".day-row-header").forEach(h => h.classList.remove("open"));
-  document.querySelectorAll("[id^='day-arrow-']").forEach(a => a.textContent = "▼");
-  if (!isOpen) { opts.classList.add("open"); header.classList.add("open"); arrow.textContent = "▲"; }
-}
-
-function selectDayOption(dayIdx, focus) {
-  const opt = WORKOUT_OPTIONS.find(o => o.focus === focus);
-  draftSchedule[dayIdx] = { ...draftSchedule[dayIdx], focus: opt.focus, muscles: opt.muscles };
-  renderEditor();
-}
-
-function saveSchedule() {
-  schedule = draftSchedule;
-  saveLS("gymsis_schedule", schedule);
-  closeModal("editor-modal");
-  renderHome();
-}
-
-// ── History panel ──────────────────────────────────────────────────────────
-function openHistory() {
-  const list = document.getElementById("history-list");
-  const last = [...history].reverse().slice(0, 14);
-  if (!last.length) { list.innerHTML = `<div style="color:#444;font-size:14px;text-align:center;padding:40px 0">No workouts yet — let's fix that 🏋️‍♀️</div>`; }
-  else {
-    list.innerHTML = last.map(h => `
-      <div class="history-row">
-        <div><div style="font-weight:600;font-size:14px;color:#ddd">${h.focus}</div><div style="font-size:12px;color:#555;margin-top:2px">${(h.muscles||[]).join(", ")}</div></div>
-        <div class="mono" style="font-size:11px;color:#444">${new Date(h.ts).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</div>
-      </div>`).join("");
+  function hideTyping() {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
   }
-  openModal("history-modal");
-}
 
-// ── Modal helpers ──────────────────────────────────────────────────────────
-function openModal(id) { document.getElementById(id).classList.add("open"); }
-function closeModal(id) { document.getElementById(id).classList.remove("open"); }
-function handleModalClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+  function scrollToBottom() {
+    const c = document.getElementById('messages');
+    c.scrollTop = c.scrollHeight;
+  }
 
-// ── Init ───────────────────────────────────────────────────────────────────
-renderHome();
-showScreen("home");
+  async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || loading) return;
+
+    const userMsg = { role: 'user', content: text, ts: Date.now() };
+    messages.push(userMsg);
+    appendBubble(userMsg);
+    input.value = '';
+    input.style.height = 'auto';
+    updateSendBtn();
+
+    if (WORKOUT_REGEX.test(text)) {
+      const w = { id: Date.now(), note: text, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) };
+      workouts.unshift(w);
+      workouts = workouts.slice(0, 50);
+      localStorage.setItem('gymsis-workouts', JSON.stringify(workouts));
+      renderLog();
+    }
+
+    loading = true;
+    updateSendBtn();
+    showTyping();
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      const assistantMsg = { role: 'assistant', content: data.reply, ts: Date.now() };
+      messages.push(assistantMsg);
+      localStorage.setItem('gymsis-messages', JSON.stringify(messages));
+      hideTyping();
+      appendBubble(assistantMsg);
+    } catch (e) {
+      hideTyping();
+      const errMsg = { role: 'assistant', content: `⚡ ${e.message}`, ts: Date.now(), error: true };
+      messages.push(errMsg);
+      appendBubble(errMsg);
+    }
+
+    loading = false;
+    updateSendBtn();
+    input.focus();
+  }
+
+  function clearChat() {
+    if (!confirm('Clear chat history?')) return;
+    messages = [];
+    localStorage.removeItem('gymsis-messages');
+    renderMessages();
+  }
+
+  function renderLog() {
+    const list = document.getElementById('log-list');
+    const empty = document.getElementById('log-empty');
+    document.getElementById('log-count').textContent = workouts.length;
+    list.innerHTML = '';
+    if (workouts.length === 0) { empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    workouts.forEach(w => {
+      const card = document.createElement('div');
+      card.className = 'workout-card';
+      card.innerHTML = `<div class="workout-date">${w.date.toUpperCase()}</div><div>${escapeHtml(w.note)}</div>`;
+      list.appendChild(card);
+    });
+  }
+
+  function switchTab(tab) {
+    document.getElementById('chat-panel').style.display = tab === 'chat' ? 'flex' : 'none';
+    document.getElementById('log-panel').classList.toggle('hidden', tab !== 'log');
+    document.getElementById('tab-chat').classList.toggle('active', tab === 'chat');
+    document.getElementById('tab-log').classList.toggle('active', tab === 'log');
+  }
+
+  function handleKeydown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+    updateSendBtn();
+  }
+
+  function updateSendBtn() {
+    document.getElementById('send-btn').disabled = loading || !document.getElementById('chat-input').value.trim();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 </script>
 </body>
 </html>
