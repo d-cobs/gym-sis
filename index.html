@@ -436,8 +436,7 @@ Respond with ONLY a JSON object, no markdown, no explanation:
 
   if (!res.ok) throw new Error('API error ' + res.status);
   const data = await res.json();
-  if (data.error) throw new Error(data.error);
-
+if (data.error) throw new Error(JSON.stringify(data));
   const text = data.reply || '';
   const match = text.match(/\{[\s\S]*\}/);
   if (!match) throw new Error('No JSON found');
