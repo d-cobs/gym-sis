@@ -20,7 +20,6 @@
   --border: #1a3a1a;
   --border2: #1f5c1f;
   --green: #4ade80;
-  --green-mid: #22c55e;
   --green-dim: #2d6b2d;
   --text: #c8f0c8;
   --text-dim: #a3f0a3;
@@ -32,431 +31,261 @@ html, body { height: 100%; background: var(--black); overflow: hidden; }
 body { color: var(--text); font-family: 'Share Tech Mono', monospace; display: flex; flex-direction: column; align-items: center; }
 #app { width: 100%; max-width: 680px; height: 100%; display: flex; flex-direction: column; padding-top: var(--safe-top); }
 
-/* Header */
 header { padding: 14px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--black); flex-shrink: 0; }
 .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.15em; color: var(--green); text-shadow: 0 0 30px rgba(74,222,128,0.4); line-height: 1; }
 .logo-sub { font-size: 8px; color: var(--green-dim); letter-spacing: 0.35em; text-transform: uppercase; margin-top: 3px; }
-.header-actions { display: flex; gap: 8px; align-items: center; }
 
-/* Tabs */
 .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--dark); flex-shrink: 0; }
 .tab-btn { flex: 1; padding: 11px 6px; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; font-family: 'Share Tech Mono', monospace; color: var(--green-dim); transition: all 0.15s; }
 .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
-/* Panels */
 .panel { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .hidden { display: none !important; }
 
-/* Buttons */
-.btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--green); padding: 10px 18px; border-radius: 6px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 0.1em; cursor: pointer; transition: all 0.15s; -webkit-appearance: none; }
+.btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--green); padding: 10px 18px; border-radius: 6px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 0.1em; cursor: pointer; transition: all 0.15s; -webkit-appearance: none; display: inline-block; }
 .btn:hover { background: #1a3a1a; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-sm { padding: 6px 12px; font-size: 11px; }
 .btn-ghost { background: none; border-color: var(--border); color: var(--text-dim); }
 
-/* Cards */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin: 0 16px 12px; }
-.card-label { font-size: 9px; color: var(--green); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 8px; }
+/* Program panel */
+#program-panel { padding: 16px 0 100px; }
+.section { padding: 0 16px 14px; }
+.section-label { font-size: 9px; color: var(--green); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 10px; }
+.week-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.1em; color: var(--green); margin-bottom: 12px; }
 
-/* ── PROGRAM TAB ── */
-#program-panel { padding: 16px 0 80px; }
+.day-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.day-chip { padding: 8px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--green-dim); font-family: 'Share Tech Mono', monospace; transition: all 0.15s; user-select: none; }
+.day-chip.on { background: var(--surface2); border-color: var(--green); color: var(--green); }
 
-.week-header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 14px; }
-.week-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.1em; color: var(--green); }
+.gen-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
 
-.day-selector { display: flex; gap: 6px; padding: 0 16px 14px; flex-wrap: wrap; }
-.day-chip { padding: 7px 12px; border-radius: 20px; font-size: 11px; letter-spacing: 0.05em; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--green-dim); transition: all 0.15s; font-family: 'Share Tech Mono', monospace; }
-.day-chip.selected { background: var(--surface2); border-color: var(--green); color: var(--green); }
+/* Workout cards */
+.workout-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 0 16px 14px; overflow: hidden; animation: fadeIn 0.25s ease; }
+.wcard-head { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.wcard-head:active { background: #0d1f0d; }
+.wcard-day { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: var(--green); }
+.wcard-focus { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.wcard-meta { text-align: right; font-size: 10px; color: var(--green-dim); line-height: 1.8; }
+.wcard-body { padding: 0 16px 16px; border-top: 1px solid var(--border); }
 
-.generate-bar { padding: 0 16px 16px; display: flex; gap: 10px; align-items: center; }
+.ss-block { margin-top: 14px; }
+.ss-label { display: inline-block; font-size: 9px; color: var(--green); letter-spacing: 0.3em; background: var(--surface2); padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
 
-/* Workout Day Card */
-.workout-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 0 16px 14px; overflow: hidden; }
-.workout-card-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-bottom: 1px solid var(--border); }
-.workout-card-header:hover { background: #0d1f0d; }
-.day-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.1em; color: var(--green); }
-.day-focus { font-size: 11px; color: var(--text-dim); margin-top: 2px; letter-spacing: 0.05em; }
-.day-meta { font-size: 10px; color: var(--green-dim); text-align: right; }
-.chevron { color: var(--green-dim); font-size: 12px; transition: transform 0.2s; }
-.chevron.open { transform: rotate(180deg); }
-.workout-body { padding: 14px 16px; display: none; }
-.workout-body.open { display: block; }
-
-/* Superset block */
-.superset-block { margin-bottom: 16px; }
-.superset-label { font-size: 9px; color: var(--green); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 8px; padding: 4px 10px; background: var(--surface2); border-radius: 4px; display: inline-block; }
-.exercise-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.exercise-row:last-child { border-bottom: none; }
-.exercise-icon { font-size: 20px; flex-shrink: 0; width: 32px; text-align: center; }
-.exercise-info { flex: 1; }
-.exercise-name { font-size: 14px; color: var(--text); font-weight: bold; margin-bottom: 3px; }
-.exercise-detail { font-size: 11px; color: var(--green-dim); margin-bottom: 4px; letter-spacing: 0.05em; }
-.exercise-cue { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-bottom: 6px; }
-.exercise-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.demo-link { font-size: 11px; color: var(--green); text-decoration: none; border: 1px solid var(--border2); padding: 3px 8px; border-radius: 4px; }
-.weight-input-wrap { display: flex; align-items: center; gap: 6px; }
-.weight-input { width: 60px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-family: 'Share Tech Mono', monospace; font-size: 12px; outline: none; }
+.ex-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.ex-row:last-child { border-bottom: none; }
+.ex-emoji { font-size: 22px; flex-shrink: 0; width: 32px; text-align: center; padding-top: 2px; }
+.ex-info { flex: 1; min-width: 0; }
+.ex-name { font-size: 14px; color: var(--text); margin-bottom: 3px; font-weight: bold; }
+.ex-timing { font-size: 11px; color: var(--green-dim); letter-spacing: 0.05em; margin-bottom: 5px; }
+.ex-cue { font-size: 12px; color: var(--text-dim); line-height: 1.55; margin-bottom: 8px; }
+.ex-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.demo-btn { font-size: 11px; color: var(--green); text-decoration: none; border: 1px solid var(--border2); padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
+.weight-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.weight-field { display: flex; align-items: center; gap: 5px; }
+.weight-input { width: 58px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 5px 8px; border-radius: 4px; font-family: 'Share Tech Mono', monospace; font-size: 13px; outline: none; -webkit-appearance: none; }
 .weight-input:focus { border-color: var(--green); }
 .weight-unit { font-size: 11px; color: var(--green-dim); }
-.weight-converted { font-size: 10px; color: var(--green-dim); margin-top: 2px; }
 
-/* Shuffle day button */
-.shuffle-wrap { display: flex; gap: 8px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
-.shuffle-label { font-size: 10px; color: var(--green-dim); letter-spacing: 0.1em; }
-.day-reassign-chip { padding: 5px 10px; border-radius: 12px; font-size: 10px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--green-dim); font-family: 'Share Tech Mono', monospace; transition: all 0.15s; }
-.day-reassign-chip.current { border-color: var(--green); color: var(--green); background: var(--surface2); }
+.shuffle-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.shuffle-label { font-size: 10px; color: var(--green-dim); flex-shrink: 0; }
+.day-pill { padding: 5px 10px; border-radius: 12px; font-size: 10px; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--green-dim); font-family: 'Share Tech Mono', monospace; transition: all 0.15s; }
+.day-pill.active { border-color: var(--green); color: var(--green); background: var(--surface2); }
 
-/* Loading state */
-.loading-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 0 16px 14px; padding: 24px; text-align: center; }
-.loading-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
-.loading-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: bounce 1.2s infinite; }
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+.log-btn-row { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+/* Loading */
+.loading-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin: 0 16px 14px; padding: 24px 16px; text-align: center; }
+.dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 10px; }
+.dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: bounce 1.2s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:1;}30%{transform:translateY(-8px);opacity:0.5;} }
-.loading-text { font-size: 12px; color: var(--green-dim); letter-spacing: 0.15em; }
+.loading-text { font-size: 11px; color: var(--green-dim); letter-spacing: 0.15em; }
 
-/* Empty state */
-.empty-state { padding: 48px 24px; text-align: center; color: var(--green-dim); }
+/* Empty */
+.empty { padding: 48px 24px; text-align: center; color: var(--green-dim); }
 .empty-icon { font-size: 52px; margin-bottom: 16px; }
-.empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.15em; color: var(--green); text-shadow: 0 0 20px rgba(74,222,128,0.3); margin-bottom: 10px; }
-.empty-desc { font-size: 13px; line-height: 1.7; max-width: 260px; margin: 0 auto 20px; }
+.empty-h { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.15em; color: var(--green); text-shadow: 0 0 20px rgba(74,222,128,0.3); margin-bottom: 10px; }
+.empty-p { font-size: 13px; line-height: 1.7; max-width: 260px; margin: 0 auto; }
 
-/* ── LOG TAB ── */
+/* Log panel */
 #log-panel { padding: 16px 0 80px; }
-.log-entry { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin: 0 16px 10px; padding: 12px 15px; }
-.log-date { font-size: 10px; color: var(--green); letter-spacing: 0.2em; margin-bottom: 6px; }
-.log-focus { font-size: 13px; color: var(--text); margin-bottom: 4px; }
-.log-weights { font-size: 11px; color: var(--text-dim); line-height: 1.7; }
+.log-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin: 0 16px 10px; padding: 12px 15px; }
+.log-date { font-size: 10px; color: var(--green); letter-spacing: 0.2em; margin-bottom: 5px; }
+.log-focus { font-size: 13px; color: var(--text); margin-bottom: 5px; }
+.log-weights { font-size: 11px; color: var(--text-dim); line-height: 1.8; }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--black); }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-@keyframes fadeIn { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
-.workout-card { animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);} }
 </style>
 </head>
 <body>
 <div id="app">
-
   <header>
     <div>
       <div class="logo">GYM SIS</div>
       <div class="logo-sub">Personal Trainer</div>
     </div>
-    <div class="header-actions">
-      <button class="btn btn-sm btn-ghost" onclick="clearAll()">↺ RESET</button>
-    </div>
+    <button class="btn btn-sm btn-ghost" onclick="clearAll()">↺ RESET</button>
   </header>
 
   <div class="tabs">
     <button class="tab-btn active" id="tab-program" onclick="switchTab('program')">🏋️ PROGRAM</button>
-    <button class="tab-btn" id="tab-log" onclick="switchTab('log')">📋 LOG</button>
+    <button class="tab-btn" id="tab-log" onclick="switchTab('log')">📋 LOG (<span id="log-count">0</span>)</button>
   </div>
 
-  <!-- PROGRAM PANEL -->
   <div id="program-panel" class="panel">
-    <div id="program-content">
-      <!-- Filled by JS -->
+    <div class="section">
+      <div class="week-title">THIS WEEK</div>
+      <div class="section-label">SELECT YOUR TRAINING DAYS</div>
+      <div class="day-chips" id="day-chips"></div>
+      <div class="gen-bar">
+        <button class="btn" id="gen-btn" onclick="generateWeek()">⚡ GENERATE WEEK</button>
+        <button class="btn btn-sm btn-ghost" id="clear-btn" onclick="clearWorkouts()" style="display:none">CLEAR</button>
+      </div>
     </div>
+    <div id="workouts-container"></div>
   </div>
 
-  <!-- LOG PANEL -->
   <div id="log-panel" class="panel hidden">
-    <div id="log-content">
-      <!-- Filled by JS -->
-    </div>
+    <div id="log-container"></div>
   </div>
-
 </div>
 
 <script>
-// ⚠️ UPDATE THIS with your Vercel URL
-const API_URL = 'https://gym-sis.vercel.app';
+const API_URL = 'https://gym-sis.vercel.app/api/chat';
 
-const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const SHORT_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const ALL_DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
-const MUSCLE_GROUPS = [
-  { id: 'lower', label: 'Lower Body', emoji: '🦵', focus: 'Quads, Glutes, Hamstrings' },
-  { id: 'push',  label: 'Push',       emoji: '💪', focus: 'Chest, Shoulders, Triceps' },
-  { id: 'pull',  label: 'Pull',       emoji: '🔙', focus: 'Back, Biceps, Rear Delts' },
-  { id: 'lower2',label: 'Lower Body', emoji: '🦵', focus: 'Glutes, Hamstrings, Calves' },
-  { id: 'full',  label: 'Full Body',  emoji: '⚡', focus: 'Full Body Power' },
+const SPLITS = [
+  { id:'lower',  label:'Lower Body A', emoji:'🦵', focus:'Quads, Glutes, Hamstrings' },
+  { id:'push',   label:'Push',         emoji:'💪', focus:'Chest, Shoulders, Triceps' },
+  { id:'pull',   label:'Pull',         emoji:'🔙', focus:'Back, Biceps, Rear Delts' },
+  { id:'lower2', label:'Lower Body B', emoji:'🍑', focus:'Glutes, Hamstrings, Calves' },
+  { id:'full',   label:'Full Body',    emoji:'⚡', focus:'Full Body Power & Core' },
 ];
 
-// State
-let selectedDays = ['Monday','Wednesday','Friday','Saturday']; // default 4 days
-let workouts = {}; // { dayName: workoutData }
-let weightLog = {}; // { dayName: { exerciseName: { kg, lbs } } }
-let savedLog = []; // array of completed workout logs
+// ── State ──
+let selectedDays = ['Monday','Wednesday','Friday','Saturday'];
+let workouts = {};   // { day: workoutObj | 'loading' | 'error' }
+let weights = {};    // { day: { exerciseName: { kg, lbs } } }
+let workoutLog = []; // saved log entries
+let openCards = {};  // { day: bool }
 
-// Load from localStorage
-function loadState() {
+function load() {
   try {
-    selectedDays = JSON.parse(localStorage.getItem('gs-days') || '["Monday","Wednesday","Friday","Saturday"]');
-    workouts = JSON.parse(localStorage.getItem('gs-workouts') || '{}');
-    weightLog = JSON.parse(localStorage.getItem('gs-weights') || '{}');
-    savedLog = JSON.parse(localStorage.getItem('gs-log') || '[]');
-  } catch(e) {}
+    const d = localStorage.getItem('gs2-days');
+    if (d) selectedDays = JSON.parse(d);
+    const w = localStorage.getItem('gs2-workouts');
+    if (w) workouts = JSON.parse(w);
+    const wt = localStorage.getItem('gs2-weights');
+    if (wt) weights = JSON.parse(wt);
+    const l = localStorage.getItem('gs2-log');
+    if (l) workoutLog = JSON.parse(l);
+    const o = localStorage.getItem('gs2-open');
+    if (o) openCards = JSON.parse(o);
+  } catch(e) { console.warn('Load error', e); }
 }
 
-function saveState() {
-  localStorage.setItem('gs-days', JSON.stringify(selectedDays));
-  localStorage.setItem('gs-workouts', JSON.stringify(workouts));
-  localStorage.setItem('gs-weights', JSON.stringify(weightLog));
-  localStorage.setItem('gs-log', JSON.stringify(savedLog));
+function save() {
+  try {
+    localStorage.setItem('gs2-days', JSON.stringify(selectedDays));
+    // Don't save loading states
+    const saveableWorkouts = {};
+    Object.entries(workouts).forEach(([k,v]) => { if (v !== 'loading') saveableWorkouts[k] = v; });
+    localStorage.setItem('gs2-workouts', JSON.stringify(saveableWorkouts));
+    localStorage.setItem('gs2-weights', JSON.stringify(weights));
+    localStorage.setItem('gs2-log', JSON.stringify(workoutLog));
+    localStorage.setItem('gs2-open', JSON.stringify(openCards));
+  } catch(e) { console.warn('Save error', e); }
 }
 
-// Main render
-function render() {
-  renderProgram();
-  renderLog();
-}
-
-function renderProgram() {
-  const content = document.getElementById('program-content');
-  const hasWorkouts = Object.keys(workouts).length > 0;
-
-  let html = '';
-
-  // Day selector
-  html += `<div class="week-header">
-    <div class="week-title">THIS WEEK</div>
-    <div style="font-size:10px;color:var(--green-dim)">${selectedDays.length} DAYS</div>
-  </div>`;
-
-  html += `<div class="day-selector">`;
-  DAYS.forEach(d => {
-    const sel = selectedDays.includes(d);
-    html += `<div class="day-chip ${sel?'selected':''}" onclick="toggleDay('${d}')">${d.slice(0,3)}</div>`;
-  });
-  html += `</div>`;
-
-  html += `<div class="generate-bar">
-    <button class="btn" onclick="generateWeek()" id="gen-btn">⚡ GENERATE WEEK</button>
-    ${hasWorkouts ? `<button class="btn btn-ghost btn-sm" onclick="clearWorkouts()">CLEAR</button>` : ''}
-  </div>`;
-
-  if (!hasWorkouts) {
-    html += `<div class="empty-state">
-      <div class="empty-icon">🏋️</div>
-      <div class="empty-title">LET'S GET TO WORK</div>
-      <div class="empty-desc">Pick your training days above, then hit Generate to build your personalized superset program.</div>
-    </div>`;
-  } else {
-    // Assign muscle groups to selected days
-    const assignments = assignMuscleGroups(selectedDays);
-    assignments.forEach(({ day, muscle }) => {
-      const w = workouts[day];
-      if (w === 'loading') {
-        html += `<div class="loading-card">
-          <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
-          <div class="loading-text">BUILDING ${day.toUpperCase()} WORKOUT...</div>
-        </div>`;
-      } else if (w) {
-        html += renderWorkoutCard(day, w, muscle);
-      }
-    });
-  }
-
-  content.innerHTML = html;
-  restoreWeightInputs();
-}
-
-function assignMuscleGroups(days) {
-  const groups = [...MUSCLE_GROUPS];
-  return days.map((day, i) => ({
-    day,
-    muscle: groups[i % groups.length]
-  }));
-}
-
-function renderWorkoutCard(day, workout, muscle) {
-  const isOpen = workout._open || false;
-  const savedDay = workout.assignedDay || day;
-
-  let html = `<div class="workout-card" id="wcard-${day}">
-    <div class="workout-card-header" onclick="toggleCard('${day}')">
-      <div>
-        <div class="day-name">${muscle.emoji} ${savedDay}</div>
-        <div class="day-focus">${workout.focus || muscle.focus}</div>
-      </div>
-      <div>
-        <div class="day-meta">${workout.duration || '35-40'} MIN</div>
-        <div class="day-meta" style="margin-top:4px">${workout.supersets?.length || 0} SUPERSETS</div>
-        <div class="chevron ${isOpen?'open'}" id="chev-${day}">▼</div>
-      </div>
-    </div>`;
-
-  if (isOpen) {
-    html += `<div class="workout-body open">`;
-
-    // Supersets
-    if (workout.supersets && workout.supersets.length > 0) {
-      workout.supersets.forEach((ss, si) => {
-        html += `<div class="superset-block">
-          <span class="superset-label">⚡ SUPERSET ${si+1}</span>`;
-        ss.exercises.forEach((ex, ei) => {
-          const wKey = `${day}__${ex.name}`;
-          const saved = (weightLog[day] || {})[ex.name] || {};
-          html += `<div class="exercise-row">
-            <div class="exercise-icon">${ex.emoji || '💪'}</div>
-            <div class="exercise-info">
-              <div class="exercise-name">${ex.name}</div>
-              <div class="exercise-detail">⏱ ${ex.duration} · ${ex.sets} sets · ${ex.muscle}</div>
-              <div class="exercise-cue">${ex.cue}</div>
-              <div class="exercise-actions">
-                <a class="demo-link" href="${ex.youtube}" target="_blank">▶ DEMO</a>
-                <div class="weight-input-wrap">
-                  <input class="weight-input" type="number" placeholder="0" 
-                    id="w-kg-${wKey}" 
-                    value="${saved.kg || ''}"
-                    onchange="updateWeight('${day}','${ex.name}','kg',this.value)"
-                    step="0.5">
-                  <span class="weight-unit">kg</span>
-                </div>
-                <div class="weight-input-wrap">
-                  <input class="weight-input" type="number" placeholder="0"
-                    id="w-lbs-${wKey}"
-                    value="${saved.lbs || ''}"
-                    onchange="updateWeight('${day}','${ex.name}','lbs',this.value)"
-                    step="1">
-                  <span class="weight-unit">lbs</span>
-                </div>
-              </div>
-              ${saved.kg ? `<div class="weight-converted">Last: ${saved.kg}kg / ${saved.lbs}lbs</div>` : ''}
-            </div>
-          </div>`;
-        });
-        html += `</div>`;
-      });
-    }
-
-    // Shuffle day
-    html += `<div class="shuffle-wrap">
-      <span class="shuffle-label">MOVE TO:</span>`;
-    DAYS.forEach(d => {
-      const isCurrent = (workout.assignedDay || day) === d;
-      html += `<div class="day-reassign-chip ${isCurrent?'current':''}" onclick="reassignDay('${day}','${d}')">${d.slice(0,3)}</div>`;
-    });
-    html += `</div>`;
-
-    // Log workout button
-    html += `<div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
-      <button class="btn btn-sm" onclick="logWorkout('${day}')">✓ LOG THIS WORKOUT</button>
-    </div>`;
-
-    html += `</div>`; // workout-body
-  }
-
-  html += `</div>`; // workout-card
-  return html;
-}
-
-function toggleCard(day) {
-  if (workouts[day] && workouts[day] !== 'loading') {
-    workouts[day]._open = !workouts[day]._open;
-    saveState();
-    renderProgram();
-  }
+// ── Day chips ──
+function renderDayChips() {
+  const container = document.getElementById('day-chips');
+  container.innerHTML = ALL_DAYS.map(d =>
+    `<div class="day-chip ${selectedDays.includes(d)?'on':''}" onclick="toggleDay('${d}')">${d.slice(0,3).toUpperCase()}</div>`
+  ).join('');
 }
 
 function toggleDay(day) {
   if (selectedDays.includes(day)) {
-    if (selectedDays.length <= 3) return; // min 3 days
+    if (selectedDays.length <= 3) return;
     selectedDays = selectedDays.filter(d => d !== day);
   } else {
-    if (selectedDays.length >= 6) return; // max 6 days
+    if (selectedDays.length >= 6) return;
     selectedDays.push(day);
-    selectedDays.sort((a,b) => DAYS.indexOf(a) - DAYS.indexOf(b));
+    selectedDays.sort((a,b) => ALL_DAYS.indexOf(a) - ALL_DAYS.indexOf(b));
   }
-  saveState();
-  renderProgram();
+  save();
+  renderDayChips();
 }
 
-function reassignDay(originalDay, newDay) {
-  if (workouts[originalDay]) {
-    workouts[originalDay].assignedDay = newDay;
-    saveState();
-    renderProgram();
-  }
+// ── Assign splits to days ──
+function getAssignments() {
+  return selectedDays.map((day, i) => ({
+    day,
+    split: SPLITS[i % SPLITS.length]
+  }));
 }
 
-function updateWeight(day, exerciseName, unit, value) {
-  if (!weightLog[day]) weightLog[day] = {};
-  if (!weightLog[day][exerciseName]) weightLog[day][exerciseName] = {};
-  const num = parseFloat(value) || 0;
-  if (unit === 'kg') {
-    weightLog[day][exerciseName].kg = num;
-    weightLog[day][exerciseName].lbs = Math.round(num * 2.20462 * 10) / 10;
-  } else {
-    weightLog[day][exerciseName].lbs = num;
-    weightLog[day][exerciseName].kg = Math.round(num / 2.20462 * 10) / 10;
-  }
-  saveState();
-  // Update the other field without full re-render
-  const other = unit === 'kg' ? 'lbs' : 'kg';
-  const otherVal = weightLog[day][exerciseName][other];
-  const wKey = `${day}__${exerciseName}`;
-  const otherInput = document.getElementById(`w-${other}-${wKey}`);
-  if (otherInput) otherInput.value = otherVal || '';
-}
-
-function restoreWeightInputs() {
-  // Inputs are already rendered with values from state
-}
-
+// ── Generate ──
 async function generateWeek() {
-  if (selectedDays.length === 0) return;
-  clearWorkouts(false);
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ GENERATING...';
 
-  const assignments = assignMuscleGroups(selectedDays);
+  // Mark all as loading
+  const assignments = getAssignments();
+  assignments.forEach(({day}) => { workouts[day] = 'loading'; });
+  renderWorkouts();
 
-  // Set all to loading
-  assignments.forEach(({ day }) => { workouts[day] = 'loading'; });
-  renderProgram();
-
-  // Generate each day sequentially
-  for (const { day, muscle } of assignments) {
+  // Generate each workout
+  for (const {day, split} of assignments) {
     try {
-      const workout = await fetchWorkout(day, muscle);
-      workouts[day] = workout;
-      saveState();
-      renderProgram();
+      const w = await fetchWorkout(day, split);
+      workouts[day] = w;
+      save();
+      renderWorkouts();
     } catch(e) {
-      workouts[day] = { error: true, focus: 'Error generating', supersets: [], duration: '—' };
-      saveState();
-      renderProgram();
+      workouts[day] = { error: true, focus: 'Generation failed — tap to retry', supersets: [], duration: '—', split };
+      save();
+      renderWorkouts();
     }
   }
+
+  btn.disabled = false;
+  btn.textContent = '⚡ REGENERATE';
+  document.getElementById('clear-btn').style.display = 'inline-block';
 }
 
-async function fetchWorkout(day, muscle) {
-  const prompt = `Generate a ${muscle.label} strength workout for ${day}. 
+async function fetchWorkout(day, split) {
+  const prompt = `You are a personal trainer. Generate a ${split.label} strength workout.
 
-Requirements:
-- Focus: ${muscle.focus}
-- Duration: 35-45 minutes total
-- Equipment: dumbbells, kettlebells, bench, stability ball, yoga mat ONLY
-- Format: 3-4 supersets of 2-3 exercises each
-- Training style: timed sets (training to failure in given time), NOT rep-based
-- Set duration: 30-45 seconds per exercise
-- Rest: handled by rotating through superset exercises (minimal dedicated rest)
+REQUIREMENTS:
+- Muscle focus: ${split.focus}
+- Duration: 35-45 minutes
+- Equipment: dumbbells, kettlebells, bench, stability ball, yoga mat ONLY — no machines, no barbell
+- Structure: exactly 3 supersets, each with 2-3 exercises
+- Sets per exercise: 3 sets
+- Timing: each set is timed (30-45 seconds), training to failure in that time — NO rep counts
+- Transitions: minimal rest between exercises in a superset (that IS the rest for the previous muscle)
 
-For EACH exercise provide:
-- name
-- muscle targeted
-- emoji (single relevant emoji)
-- duration (e.g. "40 sec")  
-- sets (e.g. "3 sets")
-- cue: 1-2 sentence form tip (be specific and practical)
-- youtube: a real YouTube search URL like https://www.youtube.com/results?search_query=dumbbell+romanian+deadlift+form
+For each exercise include:
+- name: exercise name
+- muscle: muscles worked
+- emoji: one relevant emoji
+- duration: "40 sec" or "35 sec" etc
+- sets: "3 sets"  
+- cue: 1 specific, practical form cue (1-2 sentences)
+- youtube: YouTube search URL e.g. https://www.youtube.com/results?search_query=goblet+squat+tutorial
 
-Respond ONLY with a valid JSON object exactly like this:
+Respond with ONLY a raw JSON object, no markdown, no explanation:
 {
-  "focus": "Quads, Glutes, Hamstrings",
+  "focus": "${split.focus}",
   "duration": "38",
   "supersets": [
     {
@@ -467,7 +296,7 @@ Respond ONLY with a valid JSON object exactly like this:
           "emoji": "🏋️",
           "duration": "40 sec",
           "sets": "3 sets",
-          "cue": "Hold kettlebell at chest. Drive knees out and sit deep, keeping chest tall. Drive through heels to stand.",
+          "cue": "Hold kettlebell at chest, elbows inside knees at the bottom. Drive through heels and squeeze glutes at the top.",
           "youtube": "https://www.youtube.com/results?search_query=goblet+squat+form+tutorial"
         }
       ]
@@ -478,79 +307,225 @@ Respond ONLY with a valid JSON object exactly like this:
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: prompt }]
-    })
+    body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
   });
 
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   if (data.error) throw new Error(data.error);
 
-  // Parse JSON from response
-  let text = data.reply;
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('No JSON in response');
-  const workout = JSON.parse(jsonMatch[0]);
-  workout._open = false;
-  return workout;
+  const text = data.reply || '';
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON returned');
+  const w = JSON.parse(match[0]);
+  w.split = split;
+  w.assignedDay = day;
+  return w;
+}
+
+// ── Render workouts ──
+function renderWorkouts() {
+  const container = document.getElementById('workouts-container');
+  const hasAny = Object.keys(workouts).length > 0;
+  document.getElementById('clear-btn').style.display = hasAny ? 'inline-block' : 'none';
+
+  if (!hasAny) {
+    container.innerHTML = `<div class="empty">
+      <div class="empty-icon">🏋️</div>
+      <div class="empty-h">LET'S GET TO WORK</div>
+      <div class="empty-p">Pick your training days above, then hit Generate Week.</div>
+    </div>`;
+    return;
+  }
+
+  const assignments = getAssignments();
+  container.innerHTML = assignments.map(({day, split}) => {
+    const w = workouts[day];
+    if (!w) return '';
+    if (w === 'loading') return `
+      <div class="loading-card">
+        <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="loading-text">BUILDING ${split.label.toUpperCase()}...</div>
+      </div>`;
+    return renderCard(day, w, split);
+  }).join('');
+}
+
+function renderCard(day, w, split) {
+  const isOpen = openCards[day] || false;
+  const displayDay = w.assignedDay || day;
+  const emoji = (w.split || split).emoji;
+
+  let html = `<div class="workout-card">
+    <div class="wcard-head" onclick="toggleCard('${day}')">
+      <div>
+        <div class="wcard-day">${emoji} ${displayDay}</div>
+        <div class="wcard-focus">${w.focus || split.focus}</div>
+      </div>
+      <div class="wcard-meta">
+        ${w.duration ? w.duration + ' MIN' : ''}<br>
+        ${w.supersets ? w.supersets.length + ' SUPERSETS' : ''}<br>
+        <span style="font-size:12px;color:var(--green)">${isOpen ? '▲' : '▼'}</span>
+      </div>
+    </div>`;
+
+  if (isOpen && w.supersets && w.supersets.length > 0) {
+    html += `<div class="wcard-body">`;
+
+    w.supersets.forEach((ss, si) => {
+      html += `<div class="ss-block"><span class="ss-label">⚡ SUPERSET ${si + 1}</span>`;
+      ss.exercises.forEach(ex => {
+        const saved = (weights[day] || {})[ex.name] || {};
+        const safeKey = ex.name.replace(/[^a-zA-Z0-9]/g, '_');
+        html += `<div class="ex-row">
+          <div class="ex-emoji">${ex.emoji || '💪'}</div>
+          <div class="ex-info">
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-timing">${ex.duration} · ${ex.sets} · ${ex.muscle}</div>
+            <div class="ex-cue">${ex.cue}</div>
+            <div class="ex-actions">
+              <a class="demo-btn" href="${ex.youtube}" target="_blank">▶ DEMO</a>
+            </div>
+            <div class="weight-row">
+              <div class="weight-field">
+                <input class="weight-input" type="number" inputmode="decimal" placeholder="—" step="0.5"
+                  id="kg_${day}_${safeKey}"
+                  value="${saved.kg || ''}"
+                  onchange="setWeight('${day}','${ex.name}','kg',this.value)">
+                <span class="weight-unit">kg</span>
+              </div>
+              <div class="weight-field">
+                <input class="weight-input" type="number" inputmode="decimal" placeholder="—" step="1"
+                  id="lbs_${day}_${safeKey}"
+                  value="${saved.lbs || ''}"
+                  onchange="setWeight('${day}','${ex.name}','lbs',this.value)">
+                <span class="weight-unit">lbs</span>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+
+    // Shuffle row
+    html += `<div class="shuffle-row"><span class="shuffle-label">MOVE TO:</span>`;
+    ALL_DAYS.forEach(d => {
+      const isCurrent = displayDay === d;
+      html += `<div class="day-pill ${isCurrent?'active':''}" onclick="reassign('${day}','${d}')">${d.slice(0,3).toUpperCase()}</div>`;
+    });
+    html += `</div>`;
+
+    // Log button
+    html += `<div class="log-btn-row">
+      <button class="btn btn-sm" onclick="logWorkout('${day}')">✓ LOG WORKOUT</button>
+    </div>`;
+
+    html += `</div>`; // wcard-body
+  }
+
+  html += `</div>`; // workout-card
+  return html;
+}
+
+function toggleCard(day) {
+  openCards[day] = !openCards[day];
+  save();
+  renderWorkouts();
+}
+
+function reassign(day, newDay) {
+  if (workouts[day] && workouts[day] !== 'loading') {
+    workouts[day].assignedDay = newDay;
+    save();
+    renderWorkouts();
+  }
+}
+
+function setWeight(day, exName, unit, val) {
+  if (!weights[day]) weights[day] = {};
+  if (!weights[day][exName]) weights[day][exName] = {};
+  const num = parseFloat(val) || 0;
+  if (unit === 'kg') {
+    weights[day][exName].kg = num;
+    weights[day][exName].lbs = Math.round(num * 2.20462 * 10) / 10;
+  } else {
+    weights[day][exName].lbs = num;
+    weights[day][exName].kg = Math.round(num / 2.20462 * 10) / 10;
+  }
+  save();
+  // Update the other field live
+  const safeKey = exName.replace(/[^a-zA-Z0-9]/g, '_');
+  const other = unit === 'kg' ? 'lbs' : 'kg';
+  const el = document.getElementById(`${other}_${day}_${safeKey}`);
+  if (el) el.value = weights[day][exName][other] || '';
 }
 
 function logWorkout(day) {
   const w = workouts[day];
   if (!w || w === 'loading') return;
-  const weights = weightLog[day] || {};
-  const entry = {
+  const dayWeights = weights[day] || {};
+  const weightLines = Object.entries(dayWeights)
+    .filter(([,v]) => v.kg)
+    .map(([name, v]) => `${name}: ${v.kg}kg / ${v.lbs}lbs`);
+
+  workoutLog.unshift({
     id: Date.now(),
-    date: new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+    date: new Date().toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }),
     day: w.assignedDay || day,
     focus: w.focus,
     duration: w.duration,
-    weights: Object.entries(weights).map(([name, vals]) => `${name}: ${vals.kg}kg / ${vals.lbs}lbs`).filter(s => !s.includes('undefined'))
-  };
-  savedLog.unshift(entry);
-  savedLog = savedLog.slice(0, 100);
-  saveState();
+    weights: weightLines
+  });
+  workoutLog = workoutLog.slice(0, 100);
+  save();
   renderLog();
-  // Brief visual feedback
-  const btn = event.target;
-  btn.textContent = '✓ LOGGED!';
-  btn.style.borderColor = 'var(--green)';
-  setTimeout(() => { btn.textContent = '✓ LOG THIS WORKOUT'; btn.style.borderColor = ''; }, 2000);
+  document.getElementById('log-count').textContent = workoutLog.length;
+
+  // Feedback
+  const btns = document.querySelectorAll('.log-btn-row .btn');
+  btns.forEach(b => { if (b.onclick && b.onclick.toString().includes(day)) { b.textContent = '✓ LOGGED!'; setTimeout(() => b.textContent = '✓ LOG WORKOUT', 2000); } });
 }
 
 function renderLog() {
-  const content = document.getElementById('log-content');
-  if (savedLog.length === 0) {
-    content.innerHTML = `<div class="empty-state">
+  const container = document.getElementById('log-container');
+  document.getElementById('log-count').textContent = workoutLog.length;
+  if (workoutLog.length === 0) {
+    container.innerHTML = `<div class="empty">
       <div class="empty-icon">📋</div>
-      <div class="empty-title">NO LOGS YET</div>
-      <div class="empty-desc">Complete a workout and tap "Log This Workout" to track your progress here.</div>
+      <div class="empty-h">NO LOGS YET</div>
+      <div class="empty-p">Complete a workout and tap "Log Workout" to save your progress here.</div>
     </div>`;
     return;
   }
-  content.innerHTML = savedLog.map(e => `
-    <div class="log-entry">
-      <div class="log-date">${e.date.toUpperCase()} · ${e.duration} MIN</div>
+  container.innerHTML = workoutLog.map(e => `
+    <div class="log-card">
+      <div class="log-date">${e.date.toUpperCase()} · ${e.duration || '—'} MIN</div>
       <div class="log-focus">${e.day} — ${e.focus}</div>
-      ${e.weights.length > 0 ? `<div class="log-weights">${e.weights.join('<br>')}</div>` : ''}
+      ${e.weights && e.weights.length > 0 ? `<div class="log-weights">${e.weights.join('<br>')}</div>` : ''}
     </div>
   `).join('');
 }
 
-function clearWorkouts(rerender = true) {
+function clearWorkouts() {
   workouts = {};
-  saveState();
-  if (rerender) renderProgram();
+  openCards = {};
+  save();
+  renderWorkouts();
+  document.getElementById('gen-btn').textContent = '⚡ GENERATE WEEK';
+  document.getElementById('clear-btn').style.display = 'none';
 }
 
 function clearAll() {
-  if (!confirm('Reset everything?')) return;
-  workouts = {};
-  weightLog = {};
-  savedLog = [];
+  if (!confirm('Reset everything? This clears workouts, weights, and logs.')) return;
+  workouts = {}; weights = {}; workoutLog = {}; openCards = {};
   selectedDays = ['Monday','Wednesday','Friday','Saturday'];
-  saveState();
-  render();
+  workoutLog = [];
+  save();
+  renderDayChips();
+  renderWorkouts();
+  renderLog();
+  document.getElementById('gen-btn').textContent = '⚡ GENERATE WEEK';
 }
 
 function switchTab(tab) {
@@ -560,13 +535,13 @@ function switchTab(tab) {
   document.getElementById('tab-log').classList.toggle('active', tab === 'log');
 }
 
-// Init
-loadState();
-render();
+// ── Init ──
+load();
+renderDayChips();
+renderWorkouts();
+renderLog();
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>
