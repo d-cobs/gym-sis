@@ -388,44 +388,14 @@ async function generateWeek() {
 
 async function callAPI(day, muscle) {
   const prompt = `Create a ${muscle.label} strength workout for ${day}.
+Focus muscles: ${muscle.focus}
+Equipment: dumbbells, kettlebells, bench, stability ball, yoga mat only
+Duration: 35-45 minutes
+Structure: 3-4 supersets of 2-3 exercises each
+Style: timed sets 30-45 seconds, train to failure, no rep counting
 
-Rules:
-- Focus muscles: ${muscle.focus}  
-- Total duration: 35-45 minutes
-- Equipment only: dumbbells, kettlebells, bench, stability ball, yoga mat
-- Structure: 3-4 supersets, each with 2-3 exercises
-- Training style: timed sets (train to failure in time window), NOT counting reps
-- Each set: 30-45 seconds work
-- Rest is built-in by rotating exercises within the superset
-
-For each exercise include:
-- name: exercise name
-- muscle: muscles targeted
-- emoji: one relevant emoji
-- duration: like "40 sec"
-- sets: like "3 sets"
-- cue: 1-2 sentence practical form tip
-- youtube: YouTube search URL like https://www.youtube.com/results?search_query=goblet+squat+tutorial
-
-You MUST respond with ONLY raw JSON. No markdown. No backticks. No code fences. No explanation. Start your response with { and end with }. Example:{
-  "focus": "muscle groups",
-  "duration": "38",
-  "supersets": [
-    {
-      "exercises": [
-        {
-          "name": "Exercise Name",
-          "muscle": "Quads, Glutes",
-          "emoji": "🦵",
-          "duration": "40 sec",
-          "sets": "3 sets",
-          "cue": "Form tip here.",
-          "youtube": "https://www.youtube.com/results?search_query=exercise+name+tutorial"
-        }
-      ]
-    }
-  ]
-}`;
+Return ONLY valid JSON, no markdown, no extra text:
+{"focus":"Quads, Glutes","duration":"38","supersets":[{"exercises":[{"name":"Goblet Squat","muscle":"Quads, Glutes","emoji":"🦵","duration":"40 sec","sets":"3 sets","cue":"Hold kettlebell at chest, drive knees out, sit deep.","youtube":"https://www.youtube.com/results?search_query=goblet+squat+tutorial"}]}]}`;
 
   const res = await fetch(API_URL, {
     method: 'POST',
@@ -435,13 +405,19 @@ You MUST respond with ONLY raw JSON. No markdown. No backticks. No code fences. 
 
   if (!res.ok) throw new Error('API error ' + res.status);
   const data = await res.json();
-if (data.error) throw new Error(JSON.stringify(data));
-  const text = data.reply || '';
- // Strip markdown code fences if present
-const cleaned = text.replace(/```json|```/g, '').trim();
-const match = cleaned.match(/\{[\s\S]*\}/);
-if (!match) throw new Error('Raw response: ' + text.slice(0, 200));
-const w = JSON.parse(match[0]);
+  if (data.error) throw new Error(JSON.stringify(data));
+  
+  let text = data.reply || '';
+  // Strip any markdown fences
+  text = text.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+  
+  // Extract JSON object
+  const start = text.indexOf('{');
+  const end = text.lastIndexOf('}');
+  if (start === -1 || end === -1) throw new Error('No JSON in response');
+  
+  const jsonStr = text.slice(start, end + 1);
+  const w = JSON.parse(jsonStr);
   w._open = false;
   return w;
 }
