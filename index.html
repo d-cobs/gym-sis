@@ -28,9 +28,9 @@
   --safe-top: env(safe-area-inset-top, 0px);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { height: 100%; background: var(--black); }
-body { min-height: 100%; background: var(--black); color: var(--text); font-family: 'Share Tech Mono', monospace; display: flex; flex-direction: column; align-items: center; }
-#app { width: 100%; max-width: 680px; min-height: 100vh; display: flex; flex-direction: column; padding-top: var(--safe-top); }
+html, body { height: 100%; background: var(--black); }
+body { color: var(--text); font-family: 'Share Tech Mono', monospace; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+#app { width: 100%; max-width: 680px; height: 100%; display: flex; flex-direction: column; padding-top: var(--safe-top); }
 
 /* Header */
 header { padding: 14px 20px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--black); flex-shrink: 0; }
@@ -44,7 +44,7 @@ header { padding: 14px 20px 12px; border-bottom: 1px solid var(--border); displa
 .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
 /* Panels */
-.panel { flex: 1; -webkit-overflow-scrolling: touch; }
+.panel { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .hidden { display: none !important; }
 
 /* Buttons */
@@ -59,7 +59,7 @@ header { padding: 14px 20px 12px; border-bottom: 1px solid var(--border); displa
 .card-label { font-size: 9px; color: var(--green); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 8px; }
 
 /* ── PROGRAM TAB ── */
-#program-panel { padding: 16px 0 80px; }
+#program-panel { padding-bottom: 40px; }
 
 .week-header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px 14px; }
 .week-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.1em; color: var(--green); }
@@ -219,7 +219,7 @@ function renderProgram() {
   const content = document.getElementById('program-content');
   const hasWorkouts = Object.keys(workouts).length > 0;
 
-  let html = '';
+  let html = '<div style="padding: 16px 0 40px">';
 
   // Day selector
   html += `<div class="week-header">
@@ -261,6 +261,7 @@ function renderProgram() {
     });
   }
 
+  html += '</div>';
   content.innerHTML = html;
   restoreWeightInputs();
 }
