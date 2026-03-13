@@ -378,8 +378,8 @@ async function generateWeek() {
     try {
       const w = await callAPI(day, muscle);
       state.workouts[day] = w;
-    } catch(e) {
-      state.workouts[day] = { focus: 'Error — tap to retry', supersets: [], duration: '—', _error: true };
+   } catch(e) {
+      state.workouts[day] = { focus: e.message || 'Error — see console', supersets: [], duration: '—', _error: true };
     }
     save();
     renderWorkoutsList();
