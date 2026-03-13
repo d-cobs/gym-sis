@@ -437,9 +437,11 @@ You MUST respond with ONLY raw JSON. No markdown. No backticks. No code fences. 
   const data = await res.json();
 if (data.error) throw new Error(JSON.stringify(data));
   const text = data.reply || '';
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON found');
-  const w = JSON.parse(match[0]);
+ // Strip markdown code fences if present
+const cleaned = text.replace(/```json|```/g, '').trim();
+const match = cleaned.match(/\{[\s\S]*\}/);
+if (!match) throw new Error('Raw response: ' + text.slice(0, 200));
+const w = JSON.parse(match[0]);
   w._open = false;
   return w;
 }
